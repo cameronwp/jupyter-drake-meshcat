@@ -9,7 +9,7 @@
 2. Build the image and spin it up
   #+begin_src shell
   docker build . -t jdm:latest
-  docker run -it -p 8888:8888 -v ${pwd}:/home/ubuntu/jupyter jdm:latest
+  docker run -it -p 8888:8888 -v sample:/usr/local/src/jupyter/sample jdm:latest
   #+end_src
 
 3. Follow the prompts to open Jupyter Lab in your browser. Check out the =Sample= project which walks you through example interactions with Drake and Meshcat.
