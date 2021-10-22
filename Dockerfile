@@ -12,9 +12,6 @@ RUN apt-get update && apt-get upgrade -y && apt install -y \
 ADD https://github.com/krallin/tini/releases/download/v0.19.0/tini /usr/bin/tini
 RUN chmod +x /usr/bin/tini
 
-RUN mkdir -p /opt/manipulation
-COPY --from=manipulation /opt/manipulation/manipulation/ /usr/local/lib/python3.8/dist-packages/manipulation
-
 ARG UNAME=user
 ARG UID=1000
 ARG GID=1000
@@ -28,6 +25,8 @@ WORKDIR /jupyter
 COPY requirements.txt .
 RUN python -m venv .venv
 RUN .venv/bin/pip install -r requirements.txt
+
+COPY --from=manipulation /opt/manipulation/manipulation/ .venv/lib/python3.8/site-packages/manipulation
 
 # default port for jupyter
 EXPOSE 8888

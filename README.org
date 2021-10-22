@@ -53,13 +53,6 @@ ADD https://github.com/krallin/tini/releases/download/v0.19.0/tini /usr/bin/tini
 RUN chmod +x /usr/bin/tini
 #+end_src
 
-Copy python libraries from =manipulation=.
-
-#+begin_src dockerfile :tangle Dockerfile
-RUN mkdir -p /opt/manipulation
-COPY --from=manipulation /opt/manipulation/manipulation/ /usr/local/lib/python3.8/dist-packages/manipulation
-#+end_src
-
 Create a user that matches the host UID and GID (simplifies file management for volume mounted directories).
 
 #+begin_src dockerfile :tangle Dockerfile
@@ -80,6 +73,12 @@ WORKDIR /jupyter
 COPY requirements.txt .
 RUN python -m venv .venv
 RUN .venv/bin/pip install -r requirements.txt
+#+end_src
+
+Copy python libraries from =manipulation= to the venv.
+
+#+begin_src dockerfile :tangle Dockerfile
+COPY --from=manipulation /opt/manipulation/manipulation/ .venv/lib/python3.8/site-packages/manipulation
 #+end_src
 
 Expose ports and run Jupyter lab when the container spins up.
