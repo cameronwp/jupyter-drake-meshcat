@@ -1,0 +1,15 @@
+* Jupyter Lab + PyDrake + Meshcat
+
+/Host Jupyter lab notebooks with access to PyDrake and Meshcat/
+
+** Usage
+
+1. Clone this repo and ~cd~ to it
+
+2. Build the image and spin it up
+  #+begin_src shell
+  docker build . -t jdm:latest
+  docker run -it -p 8888:8888 -v ${pwd}:/home/ubuntu/jupyter jdm:latest
+  #+end_src
+
+3. Follow the prompts to open Jupyter Lab in your browser. Check out the =Sample= project which walks you through example interactions with Drake and Meshcat.
