@@ -20,18 +20,14 @@ ARG UID=1000
 ARG GID=1000
 RUN groupadd -g $GID -o $UNAME
 RUN useradd -m -u $UID -g $GID -o $UNAME && \
-  mkdir -p /usr/local/src/jupyter && \
-  chown --recursive $UNAME:$UNAME /usr/local/src/jupyter
+  mkdir -p /jupyter && \
+  chown -R $UNAME:$UNAME /jupyter
 USER $UNAME
 
-WORKDIR /usr/local/src/jupyter
+WORKDIR /jupyter
 COPY requirements.txt .
 RUN python -m venv .venv
 RUN .venv/bin/pip install -r requirements.txt
-
-USER root
-RUN chown --recursive $UNAME:$UNAME /usr/local/src/jupyter
-USER $UNAME
 
 # default port for jupyter
 EXPOSE 8888

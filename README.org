@@ -8,7 +8,7 @@
 
 2. You've got two options to run the container.
    a. Build the image and spin it up
-      #+begin_src shell :tangle no
+      #+begin_src shell :tangle no :padline no
       docker build \
           --build-arg UID=$(id -u) \
           --build-arg GID=$(id -g) \
@@ -16,7 +16,7 @@
           . -t jdm:latest
       docker run -it \
           -p 8888:8888 -p 7000:7000 \
-          -v sample:/usr/local/src/jupyter/sample \
+          -v $PWD/sample:/jupyter/sample \
           --user $(id -u):$(id -g) \
           jdm:latest
       #+end_src
@@ -28,7 +28,7 @@
 
 This repo uses literate programming - the source code for the Dockerfile and docker-compose.yml file are written below and tangled to their final destinations.
 
-* Dockerfile
+*** Dockerfile
 
 The =drake= image /seems/ to be more system agnostic than the =manipulation= [[https://github.com/RussTedrake/manipulation/blob/master/setup/docker/Dockerfile][image]] from the MIT 6.843 [[https://manipulation.mit.edu/Fall2021/index.html#readings/assignments][problem sets]], which are meant to run on deepnote.com. There are some helpful visualization python libraries in =manipulation=, so we'll copy them over.
 
@@ -68,22 +68,18 @@ ARG UID=1000
 ARG GID=1000
 RUN groupadd -g $GID -o $UNAME
 RUN useradd -m -u $UID -g $GID -o $UNAME && \
-  mkdir -p /usr/local/src/jupyter && \
-  chown --recursive $UNAME:$UNAME /usr/local/src/jupyter
+  mkdir -p /jupyter && \
+  chown -R $UNAME:$UNAME /jupyter
 USER $UNAME
 #+end_src
 
-Setup the working directory, install python dependencies, and correct permissions.
+Setup the working directory and install python dependencies
 
 #+begin_src dockerfile :tangle Dockerfile
-WORKDIR /usr/local/src/jupyter
+WORKDIR /jupyter
 COPY requirements.txt .
 RUN python -m venv .venv
 RUN .venv/bin/pip install -r requirements.txt
-
-USER root
-RUN chown --recursive $UNAME:$UNAME /usr/local/src/jupyter
-USER $UNAME
 #+end_src
 
 Expose ports and run Jupyter lab when the container spins up.
@@ -98,10 +94,9 @@ ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD [".venv/bin/jupyter", "lab", "--no-browser", "--ip=0.0.0.0"]
 #+end_src
 
+*** docker-compose.yml
 
-* docker-compose.yml
-
-#+begin_src yaml :tangle docker-compose.yml
+#+begin_src yaml :tangle docker-compose.yml :padline no
 version: "3"
 services:
   app:
@@ -115,7 +110,7 @@ services:
 
 Use your own UID and GID in Jupyter to simplify notebook file permissions. If you don't do this, all files created in notebooks will be owned by =root=.
 
-#+begin_src yaml :tangle docker-compose.yml
+#+begin_src yaml :tangle docker-compose.yml :padline no
     user: "${UID}:${GID}"
     group_add:
       - users

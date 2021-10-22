@@ -7,7 +7,6 @@ services:
       - 7000
     volumes:
       - ./sample:/usr/local/src/jupyter/sample
-
     user: "${UID}:${GID}"
     group_add:
       - users
