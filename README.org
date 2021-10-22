@@ -1,12 +1,12 @@
 * Jupyter Lab + PyDrake + Meshcat
 
-/Host Jupyter lab notebooks with access to PyDrake and Meshcat/
+/Host Jupyter lab notebooks with ready access to PyDrake and Meshcat/
 
 ** Usage
 
 1. Clone this repo and ~cd~ to it
 
-2. You've got two options to run the container.
+2. You've got two options to run the container:
 
    a. Build the image and spin it up
       #+begin_src shell :tangle no :padline no
@@ -21,9 +21,9 @@
           --user $(id -u):$(id -g) \
           jdm:latest
       #+end_src
-   b. Just use ~docker-compose~: ~UID=${UID} GID=${GID} docker-compose up --build~ (you only need the ~--build~ the first time)
+   b. Just use ~docker-compose~: ~UID=${UID} GID=${GID} docker-compose up~
 
-3. Follow the prompts to open Jupyter Lab in your browser. Then check out =sample/intro.ipynb= which demonstrates sample interactions with Drake and Meshcat.
+3. Follow the prompts to open Jupyter Lab in your browser. From there, check out =sample/intro.ipynb=, which demonstrates sample interactions with Drake and Meshcat.
 
 4. The docker-compose file and sample ~docker run~ command above both mount the =sample/= directory into the container. Feel free to change it to any other directory on your machine. We also ensure that Jupyter doesn't change file permissions, so you should have no problem with the permissions of any notebooks you create or modify in Jupyter.
 
@@ -33,7 +33,7 @@ This repo uses literate programming - the source code for the Dockerfile and doc
 
 *** Dockerfile
 
-The =drake= image /seems/ to be more system agnostic than the =manipulation= [[https://github.com/RussTedrake/manipulation/blob/master/setup/docker/Dockerfile][image]] from the MIT 6.843 [[https://manipulation.mit.edu/Fall2021/index.html#readings/assignments][problem sets]], which are meant to run on deepnote.com. There are some helpful visualization python libraries in =manipulation=, so we'll copy them over.
+The =drake= image /seems/ to be more system agnostic than the =manipulation= [[https://github.com/RussTedrake/manipulation/blob/master/setup/docker/Dockerfile][image]] from the MIT 6.843 [[https://manipulation.mit.edu/Fall2021/index.html#readings/assignments][problem sets]], which are meant to run on deepnote.com. There are some helpful visualization python libraries in =manipulation=, so we'll copy them over (we should probably just download this directory directly instead of copying from =manipulation=.)
 
 # see
 #+begin_src dockerfile :tangle Dockerfile
@@ -41,7 +41,7 @@ FROM russtedrake/manipulation:latest as manipulation
 FROM robotlocomotion/drake:focal as drake
 #+end_src
 
-Install system dependencies. Use [[https://github.com/krallin/tini][tini]] as an init system (idea borrowed from [[p][here]]).
+Install system dependencies. Use [[https://github.com/krallin/tini][tini]] as an init system.
 
 #+begin_src dockerfile :tangle Dockerfile
 RUN apt-get update && apt-get upgrade -y && apt install -y \
@@ -51,7 +51,6 @@ RUN apt-get update && apt-get upgrade -y && apt install -y \
     python3-venv \
     xvfb
 
-# Add Tini. Tini operates as a process subreaper for jupyter. This prevents kernel crashes.
 ADD https://github.com/krallin/tini/releases/download/v0.19.0/tini /usr/bin/tini
 RUN chmod +x /usr/bin/tini
 #+end_src

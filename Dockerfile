@@ -8,7 +8,6 @@ RUN apt-get update && apt-get upgrade -y && apt install -y \
     python3-venv \
     xvfb
 
-# Add Tini. Tini operates as a process subreaper for jupyter. This prevents kernel crashes.
 ADD https://github.com/krallin/tini/releases/download/v0.19.0/tini /usr/bin/tini
 RUN chmod +x /usr/bin/tini
 
