@@ -3,10 +3,10 @@ services:
   app:
     build: .
     ports:
-      - 8888
-      - 7000
+      - 8888:8888
+      - 7000:7000
     volumes:
-      - ./sample:/usr/local/src/jupyter/sample
+      - ./sample:/jupyter/sample
     user: "${UID}:${GID}"
     group_add:
       - users

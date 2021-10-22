@@ -7,6 +7,7 @@
 1. Clone this repo and ~cd~ to it
 
 2. You've got two options to run the container.
+
    a. Build the image and spin it up
       #+begin_src shell :tangle no :padline no
       docker build \
@@ -20,7 +21,7 @@
           --user $(id -u):$(id -g) \
           jdm:latest
       #+end_src
-   b. ~Use docker-compose~: ~UID=${UID} GID=${GID} docker-compose up~
+   b. Just use ~docker-compose~: ~UID=${UID} GID=${GID} docker-compose up --build~ (you only need the ~--build~ the first time)
 
 3. Follow the prompts to open Jupyter Lab in your browser. Check out the =Sample= project which walks you through example interactions with Drake and Meshcat.
 
@@ -101,10 +102,10 @@ services:
   app:
     build: .
     ports:
-      - 8888
-      - 7000
+      - 8888:8888
+      - 7000:7000
     volumes:
-      - ./sample:/usr/local/src/jupyter/sample
+      - ./sample:/jupyter/sample
 #+end_src
 
 Use your own UID and GID in Jupyter to simplify notebook file permissions. If you don't do this, all files created in notebooks will be owned by =root=.
