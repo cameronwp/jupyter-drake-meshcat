@@ -23,7 +23,7 @@
       #+end_src
    b. Just use ~docker-compose~: ~UID=${UID} GID=${GID} docker-compose up --build~ (you only need the ~--build~ the first time)
 
-3. Follow the prompts to open Jupyter Lab in your browser. Check out the =Sample= project which walks you through example interactions with Drake and Meshcat.
+3. Follow the prompts to open Jupyter Lab in your browser. Then check out =sample/intro.ipynb= which demonstrates sample interactions with Drake and Meshcat.
 
 ** Development
 
