@@ -73,7 +73,7 @@ pycparser==2.20
 pydocstyle==6.1.1
 pydot==1.4.1
 pydrake==0.2.1
-pygame==1.9.6
+pygame==2.0.2
 Pygments==2.10.0
 PyMCubes==0.1.2
 pyngrok==5.1.0
