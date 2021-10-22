@@ -25,6 +25,8 @@
 
 3. Follow the prompts to open Jupyter Lab in your browser. Then check out =sample/intro.ipynb= which demonstrates sample interactions with Drake and Meshcat.
 
+4. The docker-compose file and sample ~docker run~ command above both mount the =sample/= directory into the container. Feel free to change it to any other directory on your machine. We also ensure that Jupyter doesn't change file permissions, so you should have no problem with the permissions of any notebooks you create or modify in Jupyter.
+
 ** Development
 
 This repo uses literate programming - the source code for the Dockerfile and docker-compose.yml file are written below and tangled to their final destinations.
