@@ -15,6 +15,7 @@
           --build-arg GID=$(id -g) \
           --build-arg UNAME=$USER \
           . -t jdm:latest
+
       docker run -it \
           -p 8888:8888 -p 7000:7000 \
           -v $PWD/sample:/jupyter/sample \
@@ -29,7 +30,7 @@
 
 ** Development
 
-This repo uses literate programming - the source code for the Dockerfile and docker-compose.yml file are written below and tangled to their final destinations.
+This repo uses literate programming - the source code for the Dockerfile and docker-compose.yml file are written below and [[https://orgmode.org/manual/Extracting-Source-Code.html][tangled]] to their final destinations.
 
 *** Dockerfile
 
