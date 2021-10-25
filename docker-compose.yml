@@ -4,7 +4,7 @@ services:
     build: .
     ports:
       - 8888:8888
-      - 7000:7000
+      - 7000-7100:7000-7100
     volumes:
       - ./sample:/jupyter/sample
     user: "${UID}:${GID}"

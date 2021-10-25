@@ -21,16 +21,16 @@ RUN useradd -m -u $UID -g $GID -o $UNAME && \
 USER $UNAME
 
 WORKDIR /jupyter
-COPY requirements.txt .
 RUN python -m venv .venv
+COPY requirements.txt .
 RUN .venv/bin/pip install -r requirements.txt
 
 COPY --from=manipulation /opt/manipulation/manipulation/ .venv/lib/python3.8/site-packages/manipulation
 
 # default port for jupyter
 EXPOSE 8888
-# default port for meshcat
-EXPOSE 7000
+# meshcat will use port 7000 first, then increment by 1 for each subsequent instantiation
+EXPOSE 7000-7100
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD [".venv/bin/jupyter", "lab", "--no-browser", "--ip=0.0.0.0"]

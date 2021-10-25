@@ -17,7 +17,7 @@
           . -t jdm:latest
 
       docker run -it \
-          -p 8888:8888 -p 7000:7000 \
+          -p 8888:8888 -p 7000-7100:7000-7100 \
           -v $PWD/sample:/jupyter/sample \
           --user $(id -u):$(id -g) \
           jdm:latest
@@ -73,8 +73,8 @@ Setup the working directory and install python dependencies
 
 #+begin_src dockerfile :tangle Dockerfile
 WORKDIR /jupyter
-COPY requirements.txt .
 RUN python -m venv .venv
+COPY requirements.txt .
 RUN .venv/bin/pip install -r requirements.txt
 #+end_src
 
@@ -89,8 +89,8 @@ Expose ports and run Jupyter lab when the container spins up.
 #+begin_src dockerfile :tangle Dockerfile
 # default port for jupyter
 EXPOSE 8888
-# default port for meshcat
-EXPOSE 7000
+# meshcat will use port 7000 first, then increment by 1 for each subsequent instantiation
+EXPOSE 7000-7100
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD [".venv/bin/jupyter", "lab", "--no-browser", "--ip=0.0.0.0"]
@@ -105,7 +105,7 @@ services:
     build: .
     ports:
       - 8888:8888
-      - 7000:7000
+      - 7000-7100:7000-7100
     volumes:
       - ./sample:/jupyter/sample
 #+end_src
